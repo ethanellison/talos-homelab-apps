@@ -19,13 +19,14 @@ spec:
   values:
     service:
       enabled: true
-      type: LoadBalancer
-      annotations:
-        load-balancer.hetzner.cloud/location: ${HCLOUD_LOCATION}
-        load-balancer.hetzner.cloud/use-private-ip: "true"
+      type: NodePort
+      externalTrafficPolicy: Cluster
     ingressClass:
       enabled: true
       isDefaultClass: true
+    additionalArguments:
+      - "--entrypoints.web.forwardedHeaders.trustedIPs=10.0.0.0/8"
+      - "--entrypoints.websecure.forwardedHeaders.trustedIPs=10.0.0.0/8"
     providers:
       kubernetesCRD:
         enabled: true
