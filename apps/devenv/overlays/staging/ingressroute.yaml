@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: "Host(`dev.<STAGING_WORKER_IP>.nip.io`)"
+    - match: "Host(`dev.${STAGING_LB_IP}.nip.io`)"
       kind: Rule
       services:
         - name: ttyd
