@@ -17,7 +17,7 @@ spec:
         runAsNonRoot: false
       containers:
         - name: ttyd
-          image: ghcr.io/ethanellison/toolbox-base:latest
+          image: ghcr.io/ethanellison/toolbox-dev:latest
           command:
             - ttyd
             - "-W"
