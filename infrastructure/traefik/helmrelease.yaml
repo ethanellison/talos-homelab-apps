@@ -20,6 +20,9 @@ spec:
     service:
       enabled: true
       type: LoadBalancer
+      annotations:
+        load-balancer.hetzner.cloud/location: ${HCLOUD_LOCATION}
+        load-balancer.hetzner.cloud/use-private-ip: "true"
     ingressClass:
       enabled: true
       isDefaultClass: true

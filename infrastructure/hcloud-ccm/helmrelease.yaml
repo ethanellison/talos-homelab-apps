@@ -1,0 +1,31 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hcloud-cloud-controller-manager
+  namespace: flux-system
+spec:
+  interval: 10m
+  targetNamespace: kube-system
+  chart:
+    spec:
+      chart: hcloud-cloud-controller-manager
+      sourceRef:
+        kind: HelmRepository
+        name: hcloud
+        namespace: flux-system
+      interval: 10m
+  values:
+    env:
+      HCLOUD_TOKEN:
+        valueFrom:
+          secretKeyRef:
+            name: hcloud
+            key: token
+      HCLOUD_NETWORK:
+        valueFrom:
+          secretKeyRef:
+            name: hcloud
+            key: network
+            optional: true
+    networking:
+      enabled: false
