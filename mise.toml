@@ -1,0 +1,4 @@
+[tools]
+flux2 = "latest"
+kubectl = "latest"
+kustomize = "latest"
