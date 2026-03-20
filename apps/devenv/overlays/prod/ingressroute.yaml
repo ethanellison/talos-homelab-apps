@@ -1,0 +1,14 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ttyd
+  namespace: devenv
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: "Host(`devenv.local`)"
+      kind: Rule
+      services:
+        - name: ttyd
+          port: 7681

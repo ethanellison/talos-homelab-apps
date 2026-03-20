@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttyd
+  namespace: devenv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ttyd
+  template:
+    metadata:
+      labels:
+        app: ttyd
+    spec:
+      securityContext:
+        runAsNonRoot: false
+      containers:
+        - name: ttyd
+          image: ghcr.io/ethanellison/toolbox-dev:latest
+          command:
+            - ttyd
+            - "-W"
+            - "-p"
+            - "7681"
+            - tmux
+            - new
+            - "-A"
+            - "-s"
+            - main
+          ports:
+            - containerPort: 7681
+          volumeMounts:
+            - name: home
+              mountPath: /root
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+      volumes:
+        - name: home
+          emptyDir: {}
