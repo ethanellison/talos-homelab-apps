@@ -12,9 +12,9 @@ spec:
   prune: true
   wait: true
   timeout: 10m
-  postBuild:
-    substituteFrom:
-      - kind: ConfigMap
-        name: staging-vars
+  # postBuild:
+  #   substituteFrom:
+  #     - kind: ConfigMap
+  #       name: staging-vars
   dependsOn:
     - name: infrastructure
