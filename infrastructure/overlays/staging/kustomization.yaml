@@ -4,7 +4,6 @@ resources:
   - ../../traefik
   - ../../external-dns
   - ../../cert-manager
-  - cert-manager-clusterissuer-cloudflare.yaml
 patchesStrategicMerge:
   - traefik-helmrelease-patch.yaml
   - external-dns-values-patch.yaml
