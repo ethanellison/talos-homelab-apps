@@ -7,3 +7,5 @@ spec:
   values:
     service:
       type: LoadBalancer
+      annotations:
+        load-balancer.hetzner.cloud/network-zone: eu-central
