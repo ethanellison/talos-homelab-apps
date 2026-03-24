@@ -6,7 +6,6 @@ metadata:
   annotations:
     load-balancer.hetzner.cloud/network-zone: eu-central
 spec:
-  type: LoadBalancer
   selector:
     app: ttyd
   ports:
