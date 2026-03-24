@@ -1,34 +1,42 @@
 # AGENTS.md
 
-Repository guidance for agentic coding assistants in `talos-homelab-apps`.
+Repository guidance for agentic coding assistants operating in `talos-homelab-apps`.
 
-## 1) Repository purpose and layout
+## 1) Repository purpose
 
-- Flux GitOps manifests repo for Kubernetes clusters (staging + prod).
-- Main directories:
-  - `clusters/` → Flux `Kustomization` objects and cluster wiring
-  - `infrastructure/` → shared infrastructure modules (e.g., Traefik)
-  - `apps/` → application manifests and environment overlays
-- Primary format: YAML manifests.
-- No app runtime code package manager (`package.json`, `go.mod`, `pyproject.toml` absent).
+- Flux GitOps manifest repository for homelab Kubernetes clusters.
+- Environments currently in use: `staging` and `prod`.
+- Main artifact type: YAML manifests.
+- No application runtime project (`package.json`, `go.mod`, `pyproject.toml`) exists here.
 
-## 2) Toolchain baseline
+## 2) Repository layout
 
-Defined in `mise.toml`:
+- `clusters/`
+  - Cluster-level Flux `Kustomization` resources and wiring.
+  - Contains `flux-system` bootstrap artifacts and environment aggregation.
+- `infrastructure/`
+  - Shared infrastructure modules (example: Traefik) and overlays.
+- `apps/`
+  - App manifests and environment-specific overlays.
+
+## 3) Canonical toolchain
+
+From `mise.toml`:
 
 - `flux2 = latest`
 - `kubectl = latest`
 - `kustomize = latest`
 
-Assume these CLIs are the canonical workflow tools.
+Use these tools as source of truth for validation and operations.
 
-## 3) Build / lint / test commands
+## 4) Build / lint / test commands
 
-This repo has no dedicated linter or unit-test framework; validation is manifest-focused.
+This repo has no unit-test framework and no dedicated lint command.
+Validation is render-based and reconciliation-based.
 
-### 3.1 Build (render) checks
+### 4.1 Primary render checks
 
-Run `kustomize build` for each changed scope:
+Run for relevant changed scopes:
 
 ```bash
 kustomize build clusters/staging
@@ -36,7 +44,7 @@ kustomize build infrastructure
 kustomize build apps/devenv/overlays/staging
 ```
 
-Optional alternative:
+Fallback equivalents:
 
 ```bash
 kubectl kustomize clusters/staging
@@ -44,20 +52,9 @@ kubectl kustomize infrastructure
 kubectl kustomize apps/devenv/overlays/staging
 ```
 
-### 3.2 Flux reconcile checks
+### 4.2 Single-test equivalent (fast per-change check)
 
-Use after Flux/Kustomization/Helm resource changes:
-
-```bash
-flux reconcile source git flux-system -n flux-system
-flux reconcile kustomization flux-system -n flux-system
-flux reconcile kustomization infrastructure -n flux-system
-flux reconcile kustomization apps -n flux-system --with-source
-```
-
-### 3.3 Single-test equivalent
-
-No unit tests exist yet; treat a single-target render as per-change testing:
+Use one targeted render as closest equivalent of a single test:
 
 ```bash
 # App scope
@@ -67,7 +64,20 @@ kustomize build apps/devenv/overlays/staging
 kustomize build infrastructure/traefik
 ```
 
-### 3.4 Operational status checks
+Rule: run single-scope first, then run at least one parent aggregation render.
+
+### 4.3 Flux reconcile checks
+
+Run after Flux/Kustomization/Helm changes affecting live state:
+
+```bash
+flux reconcile source git flux-system -n flux-system
+flux reconcile kustomization flux-system -n flux-system
+flux reconcile kustomization infrastructure -n flux-system
+flux reconcile kustomization apps -n flux-system --with-source
+```
+
+### 4.4 Operational status checks
 
 ```bash
 kubectl get kustomizations -n flux-system
@@ -76,69 +86,92 @@ kubectl get pods -n traefik
 kubectl get crds | grep -i traefik
 ```
 
-## 4) Required change workflow
+## 5) Required change workflow
 
-For every manifest update:
+For every manifest change:
 
 1. Edit the smallest correct scope.
 2. Build directly modified kustomization path(s).
 3. Build at least one parent aggregation path (`clusters/staging` or `infrastructure`).
-4. Reconcile in Flux when live behavior is affected.
-5. Leave no unresolved placeholders unless intentionally handled by Flux substitution.
+4. Reconcile in Flux when runtime behavior changes.
+5. Leave no unresolved placeholders unless intentionally resolved by Flux substitution.
 
-## 5) Code style guidelines (YAML-first)
+### 5.1 Decision quality and non-blind-agreement protocol
 
-### 5.1 Formatting
+- Do not agree blindly with user requests when a safer, simpler, or more correct approach exists.
+- Before executing non-trivial plans, run a critique-first pass:
+  1. State assumptions.
+  2. Identify risks and likely failure modes.
+  3. Propose 1-3 viable alternatives with tradeoffs.
+  4. Recommend the best option and explain why others are weaker.
+- If the user-provided plan is suboptimal, explicitly say so and propose a minimal-change better path.
+- Prefer constructive pushback with evidence (commands, repo references, or rendered output), not opinion-only disagreement.
 
-- 2-space indentation.
-- Stable, scannable key ordering.
-- Quote strings when they contain special characters/template syntax.
-- Avoid commented-out dead config.
+### 5.2 Mandatory low-confidence escalation
 
-### 5.2 Naming conventions
+- If confidence is `low` for plan correctness, safety, or feasibility, escalation is required before implementation.
+- Required escalation sequence:
+  1. Run `plan-thinking-critic` to evaluate plan quality and reasoning gaps.
+  2. Consult `Oracle` for independent review of architecture/logic/risk.
+  3. Synthesize both outputs into a revised execution plan.
+- Do not proceed to implementation until the revised plan has clear verification steps and resolved critical findings.
+- Treat any unresolved `critical` findings from `plan-thinking-critic` or `Oracle` as a blocker.
 
-- `metadata.name`: lowercase kebab-case, short and stable.
+## 6) Code style guidelines
+
+### 6.1 Formatting
+
+- Use 2-space indentation.
+- Keep key order stable and readable (`apiVersion`, `kind`, `metadata`, `spec`).
+- Quote strings containing template syntax, special characters, or CLI flags.
+- Do not commit commented-out dead configuration.
+
+### 6.2 Naming conventions
+
+- `metadata.name`: lowercase kebab-case and stable.
 - `metadata.namespace`: explicit on namespaced resources.
 - Filenames: lowercase kebab-case by resource intent.
+- Canonical filenames include:
   - `kustomization.yaml`
   - `helmrelease.yaml`
   - `helmrepository.yaml`
   - `ingressroute.yaml`
+  - `namespace.yaml`
 
-### 5.3 Kustomize conventions
+### 6.3 Imports, typing, naming, and scripts
+
+- Imports: N/A (YAML-first repository).
+- Static typing: N/A; correctness is Kubernetes schema/API-version driven.
+- If scripts are added, use strict shell mode: `set -euo pipefail`.
+- Script/function names should be descriptive and consistent.
+
+### 6.4 Kustomize and Flux conventions
 
 - Every deployable directory should contain `kustomization.yaml`.
 - Keep `resources:` paths relative, explicit, and logically ordered.
-- Prefer composition via small modules aggregated by parent kustomizations.
-
-### 5.4 Flux conventions
-
-- Flux `Kustomization` objects live under `clusters/*`.
+- Prefer composable modules aggregated by parent kustomizations.
+- Use overlays for environment-specific differences.
+- Keep Flux `Kustomization` resources under `clusters/*`.
+- Keep `sourceRef` consistent with `GitRepository/flux-system` unless intentionally changed.
 - Use `dependsOn` for ordering (infrastructure before apps).
-- Keep `sourceRef` consistent (`GitRepository/flux-system`) unless intentionally different.
-- Use `postBuild.substituteFrom` for runtime values (e.g., `${STAGING_LB_IP}`).
+- Use `postBuild.substituteFrom` for runtime substitutions.
 
-### 5.5 Imports, typing, and scripts
+### 6.5 Error handling and safety
 
-- Imports: N/A in this YAML-only repo.
-- Static typing: N/A; correctness comes from valid API schemas/fields.
-- If scripts are added later, require strict shell safety (`set -euo pipefail`).
+- Treat render failure as hard failure; fix root cause before proceeding.
+- Never commit secrets, kubeconfigs, credentials, private keys, or tokens.
+- Prefer additive and reversible manifest changes.
+- Avoid destructive operations without explicit operator intent.
+- Treat generated `gotk-*` manifests as generated artifacts; avoid manual edits unless explicitly requested.
 
-### 5.6 Error handling and safety
+## 7) Repository-specific patterns
 
-- Never commit secrets, kubeconfigs, credentials, or tokens.
-- Prefer additive, reversible manifest changes.
-- Avoid destructive behavior without explicit operator intent.
-- Validate uncertain CRD fields against installed API versions.
+- Canonical staging app overlay path: `./apps/devenv/overlays/staging`.
+- Staging apps depend on staging infrastructure via `dependsOn`.
+- Staging ingress uses `${STAGING_LB_IP}` substitution.
+- Substitution source: `ConfigMap/staging-vars` in namespace `flux-system`.
 
-## 6) Repository-specific patterns
-
-- Staging apps path: `./apps/devenv/overlays/staging`.
-- Staging apps depend on staging infrastructure.
-- Staging IngressRoute host uses `${STAGING_LB_IP}` substitution.
-- Substitution source: `ConfigMap/staging-vars` in `flux-system`.
-
-## 7) Cursor / Copilot rules status
+## 8) Cursor and Copilot rules
 
 Checked paths and currently absent:
 
@@ -146,16 +179,16 @@ Checked paths and currently absent:
 - `.cursorrules`
 - `.github/copilot-instructions.md`
 
-Until these files exist, treat this `AGENTS.md` as authoritative.
+Until those files exist, this `AGENTS.md` is authoritative for agent behavior.
 
-## 8) Git and PR hygiene
+## 9) Git and PR hygiene
 
-- Keep commits small and deployable.
-- Use concise, plain-English commit messages.
-- Avoid mixing unrelated changes.
+- Keep commits small, focused, and deployable.
+- Use concise plain-English commit messages.
+- Avoid mixing unrelated changes in one commit.
 - Validate all affected kustomization roots before PR.
 
-Pre-PR checks:
+Pre-PR minimum:
 
 ```bash
 git status
@@ -164,11 +197,11 @@ kustomize build infrastructure
 kustomize build apps/devenv/overlays/staging
 ```
 
-## 9) Quick agent decision rules
+## 10) Quick agent heuristics
 
-- Ordering change? Verify `dependsOn` and cluster root kustomization.
-- Endpoint/IP change? Prefer Flux substitution over hardcoding.
-- Editing generated `gotk-*` files? Avoid unless explicitly requested.
+- Ordering changed? Verify `dependsOn` and cluster root wiring.
+- Endpoint/IP changed? Prefer substitution over hardcoding.
+- Editing generated `gotk-*` files? Stop unless explicitly requested.
 - Missing local binaries? Report exact failing command and required install.
 
 End of file.
