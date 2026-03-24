@@ -3,6 +3,8 @@ kind: IngressRoute
 metadata:
   name: ttyd
   namespace: devenv
+  annotations:
+    external-dns.alpha.kubernetes.io/target: traefik.staging.sneakysquid.xyz
 spec:
   entryPoints:
     - web

@@ -8,5 +8,6 @@ spec:
     service:
       type: LoadBalancer
       annotations:
+        external-dns.alpha.kubernetes.io/hostname: traefik.staging.sneakysquid.xyz
         load-balancer.hetzner.cloud/network-zone: eu-central
         load-balancer.hetzner.cloud/use-private-ip: "true"

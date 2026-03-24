@@ -5,11 +5,17 @@ metadata:
   namespace: flux-system
 spec:
   values:
+    sources:
+      - service
+      - traefik-proxy
     provider:
       name: cloudflare
     domainFilters:
-      - staging.sneakysquid.xyz
+      - sneakysquid.xyz
     txtOwnerId: staging-external-dns
+    extraArgs:
+      - --source=service
+      - --source=traefik-proxy
     env:
       - name: CF_API_TOKEN
         valueFrom:
