@@ -8,11 +8,9 @@ spec:
   targetNamespace: cert-manager
   install:
     createNamespace: true
-    crds:
-      create: true
+    crds: Create
   upgrade:
-    crds:
-      create: true
+    crds: Create
   chart:
     spec:
       chart: cert-manager
