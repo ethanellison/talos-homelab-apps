@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sshd
+  namespace: devenv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sshd
+  template:
+    metadata:
+      labels:
+        app: sshd
+    spec:
+      securityContext:
+        runAsNonRoot: false
+      containers:
+        - name: sshd
+          image: ghcr.io/ethanellison/toolbox-dev:latest
+          command:
+            - /bin/sh
+            - -lc
+            - |
+              set -eu
+              mkdir -p /run/sshd /root/.ssh
+              ssh-keygen -A
+              exec /usr/sbin/sshd -D -e -p 22
+          ports:
+            - containerPort: 22
+          volumeMounts:
+            - name: home
+              mountPath: /root
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+      volumes:
+        - name: home
+          emptyDir: {}

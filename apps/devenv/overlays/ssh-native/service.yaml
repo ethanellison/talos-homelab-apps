@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sshd
+  namespace: devenv
+spec:
+  type: ClusterIP
+  selector:
+    app: sshd
+  ports:
+    - port: 22
+      targetPort: 22

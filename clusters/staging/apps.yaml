@@ -8,7 +8,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/devenv/overlays/staging
+  path: ./apps/devenv/overlays/ssh-native
   prune: true
   wait: true
   timeout: 10m

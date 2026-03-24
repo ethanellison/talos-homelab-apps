@@ -1,0 +1,26 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: flux-system
+spec:
+  interval: 10m
+  targetNamespace: external-dns
+  install:
+    createNamespace: true
+  chart:
+    spec:
+      chart: external-dns
+      version: 1.20.0
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns
+        namespace: flux-system
+      interval: 10m
+  values:
+    sources:
+      - traefik-proxy
+    policy: upsert-only
+    registry: txt
+    extraArgs:
+      - --source=traefik-proxy

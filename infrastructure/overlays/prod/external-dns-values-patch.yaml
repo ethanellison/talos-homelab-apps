@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: flux-system
+spec:
+  values:
+    provider:
+      name: pihole
+    domainFilters:
+      - staging.lan
+    txtOwnerId: prod-external-dns
+    registry: noop
+    extraArgs:
+      - --source=traefik-proxy
+      - --provider=pihole
+      - --registry=noop
+      - --policy=upsert-only
+      - --pihole-api-version=6
+      - --pihole-server=<internal-address>
+    pihole:
+      server: <internal-address>
+      secretName: pihole-password
