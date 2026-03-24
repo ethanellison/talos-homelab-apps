@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: ttyd
   namespace: devenv
-  annotations:
-    load-balancer.hetzner.cloud/network-zone: eu-central
 spec:
   selector:
     app: ttyd
