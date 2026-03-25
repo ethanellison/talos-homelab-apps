@@ -7,4 +7,3 @@ resources:
 patchesStrategicMerge:
   - traefik-helmrelease-patch.yaml
   - external-dns-values-patch.yaml
-  - traefik-dashboard-ingressroute.yaml
