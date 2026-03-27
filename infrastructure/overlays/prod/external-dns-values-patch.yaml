@@ -17,7 +17,7 @@ spec:
       - --registry=noop
       - --policy=upsert-only
       - --pihole-api-version=6
-      - --pihole-server=<internal-address>
+      - --pihole-server=192.168.0.21
     pihole:
-      server: <internal-address>
+      server: 192.168.0.21
       secretName: pihole-password
