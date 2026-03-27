@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`traefik.staging.lan`) && PathPrefix(`/dashboard`)
+    - match: Host(`traefik.homelab.lan`) && PathPrefix(`/dashboard`)
       kind: Rule
       services:
         - name: api@internal

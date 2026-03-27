@@ -4,5 +4,6 @@ resources:
   - ../../traefik
   - ../../external-dns
   - ../../cert-manager
+  - ./traefik-dashboard-ingressroute.yaml
 patchesStrategicMerge:
   - external-dns-values-patch.yaml
