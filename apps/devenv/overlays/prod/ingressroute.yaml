@@ -4,12 +4,12 @@ metadata:
   name: ttyd
   namespace: devenv
   annotations:
-    external-dns.alpha.kubernetes.io/target: traefik.staging.lan
+    external-dns.alpha.kubernetes.io/target: homelab.lan
 spec:
   entryPoints:
     - web
   routes:
-    - match: "Host(`devenv.staging.lan`)"
+    - match: "Host(`devenv.homelab.lan`)"
       kind: Rule
       services:
         - name: ttyd
