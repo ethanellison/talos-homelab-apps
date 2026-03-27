@@ -8,16 +8,12 @@ spec:
     provider:
       name: pihole
     domainFilters:
-      - staging.lan
+      - homelab.local
     txtOwnerId: prod-external-dns
     registry: noop
     extraArgs:
-      - --source=traefik-proxy
-      - --provider=pihole
-      - --registry=noop
-      - --policy=upsert-only
       - --pihole-api-version=6
-      - --pihole-server=192.168.0.21
+      - --pihole-server=http://192.168.0.21
     pihole:
       server: 192.168.0.21
       secretName: pihole-password
