@@ -5,6 +5,9 @@ metadata:
   namespace: flux-system
 spec:
   values:
+    sources:
+      - service
+      - traefik-proxy
     provider:
       name: pihole
     domainFilters:
@@ -12,6 +15,8 @@ spec:
     txtOwnerId: prod-external-dns
     registry: noop
     extraArgs:
+      - --source=service
+      - --source=traefik-proxy
       - --pihole-api-version=6
       - --pihole-server=http://192.168.0.21
     pihole:
