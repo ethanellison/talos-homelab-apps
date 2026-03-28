@@ -1,0 +1,52 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: metallb
+  namespace: flux-system
+spec:
+  interval: 10m
+  targetNamespace: metallb
+  install:
+    createNamespace: true
+  chart:
+    spec:
+      chart: metallb
+      sourceRef:
+        kind: HelmRepository
+        name: metallb
+        namespace: flux-system
+      interval: 10m
+  values:
+    # Default values for metallb.
+    # To configure MetalLB, you must specify IPAddressPool and L2Advertisement or BGPAdvertisement (CRDs).
+    rbac:
+      create: true
+    prometheus:
+      scrapeAnnotations: false
+      metricsPort: 7472
+      rbacPrometheus: true
+    controller:
+      enabled: true
+      logLevel: info
+      strategy:
+        type: RollingUpdate
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
+    speaker:
+      enabled: true
+      logLevel: info
+      tolerateMaster: true
+      memberlist:
+        enabled: true
+        mlBindPort: 7946
+      excludeInterfaces:
+        enabled: true
+      frr:
+        enabled: true
+    crds:
+      enabled: true
+      validationFailurePolicy: Fail
+    networkpolicies:
+      enabled: false
