@@ -12,6 +12,6 @@ spec:
   prune: false
   wait: true
   timeout: 10m
-  depends_on:
+  dependsOn:
     - name: cert-manager
     - name: metal-lb
