@@ -6,5 +6,6 @@ resources:
   - ../../cert-manager
   - ../../metal-lb
   - ./traefik-dashboard-ingressroute.yaml
+  - ./metallb-config.yaml
 patchesStrategicMerge:
   - external-dns-values-patch.yaml
