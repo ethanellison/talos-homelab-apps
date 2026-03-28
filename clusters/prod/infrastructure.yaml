@@ -13,5 +13,5 @@ spec:
   wait: true
   timeout: 10m
   depends_on:
-    - cert-manager
-    - metal-lb
+    - name: cert-manager
+    - name: metal-lb
