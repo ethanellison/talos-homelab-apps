@@ -21,11 +21,8 @@ spec:
       dashboard: true
     service:
       enabled: true
-      type: NodePort
+      type: LoadBalancer
       externalTrafficPolicy: Cluster
-      annotations:
-        metallb.universe.tf/address-pool: default-pool
-        metallb.universe.tf/loadBalancerIPs: 192.168.0.80
     ingressClass:
       enabled: true
       isDefaultClass: true

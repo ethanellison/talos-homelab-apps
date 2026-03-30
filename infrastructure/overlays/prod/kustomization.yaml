@@ -6,3 +6,4 @@ resources:
   - ../../external-dns
 patchesStrategicMerge:
   - external-dns-values-patch.yaml
+  - traefik-helmrelease-patch.yaml
