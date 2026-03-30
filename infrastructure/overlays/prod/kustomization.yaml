@@ -4,6 +4,7 @@ resources:
   - traefik-dashboard-ingressroute.yaml
   - metallb-config.yaml
   - ../../external-dns
+  - ../../traefik
 patchesStrategicMerge:
   - external-dns-values-patch.yaml
   - traefik-helmrelease-patch.yaml
