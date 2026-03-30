@@ -1,14 +1,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: metal-lb
+  name: infrastructure-controllers
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/metal-lb
+  path: ./infrastructure
   prune: false
   wait: true
   timeout: 10m

@@ -11,7 +11,7 @@ spec:
     provider:
       name: pihole
     domainFilters:
-      - homelab.local
+      - homelab.lan
     txtOwnerId: prod-external-dns
     registry: noop
     extraArgs:
