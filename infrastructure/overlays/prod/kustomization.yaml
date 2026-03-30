@@ -3,5 +3,6 @@ kind: Kustomization
 resources:
   - traefik-dashboard-ingressroute.yaml
   - metallb-config.yaml
+  - ../../external-dns
 patchesStrategicMerge:
   - external-dns-values-patch.yaml
