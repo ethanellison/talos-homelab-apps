@@ -13,6 +13,7 @@ spec:
       labels:
         app: ttyd
     spec:
+      serviceAccountName: devpod-workspace-sa
       securityContext:
         runAsNonRoot: false
       containers:
