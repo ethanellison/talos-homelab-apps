@@ -1,0 +1,2 @@
+Error: accumulating resources: accumulation err='accumulating resources from '../../namespace.yaml': security; file '/var/home/ethanellison/talos-homelab-apps/apps/devenv/namespace.yaml' is not in or below '/var/home/ethanellison/talos-homelab-apps/apps/devenv/overlays/staging'': must build at directory: '/var/home/ethanellison/talos-homelab-apps/apps/devenv/namespace.yaml': file is not directory
+EXIT_CODE: 1

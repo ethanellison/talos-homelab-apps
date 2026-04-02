@@ -1,0 +1,15 @@
+--- COMMAND: flux reconcile source git flux-system -n flux-system
+✗ failed to get server groups: Get "http://localhost:8080/api": dial tcp [::1]:8080: connect: connection refused
+EXIT:1
+
+--- COMMAND: flux reconcile kustomization flux-system -n flux-system
+✗ failed to get server groups: Get "http://localhost:8080/api": dial tcp [::1]:8080: connect: connection refused
+EXIT:1
+
+--- COMMAND: flux reconcile kustomization infrastructure -n flux-system
+✗ failed to get server groups: Get "http://localhost:8080/api": dial tcp [::1]:8080: connect: connection refused
+EXIT:1
+
+--- COMMAND: flux reconcile kustomization apps -n flux-system --with-source
+✗ failed to get server groups: Get "http://localhost:8080/api": dial tcp [::1]:8080: connect: connection refused
+EXIT:1

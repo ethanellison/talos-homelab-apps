@@ -1,0 +1,63 @@
+===== COMMAND: kustomize build apps/devenv/overlays/ssh-native =====
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devenv
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sshd
+  namespace: devenv
+spec:
+  ports:
+  - port: 22
+    targetPort: 22
+  selector:
+    app: sshd
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sshd
+  namespace: devenv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sshd
+  template:
+    metadata:
+      labels:
+        app: sshd
+    spec:
+      containers:
+      - command:
+        - /bin/sh
+        - -lc
+        - |
+          set -eu
+          mkdir -p /run/sshd /root/.ssh
+          ssh-keygen -A
+          exec /usr/sbin/sshd -D -e -p 22
+        image: ghcr.io/ethanellison/toolbox-dev:latest
+        name: sshd
+        ports:
+        - containerPort: 22
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        volumeMounts:
+        - mountPath: /root
+          name: home
+      securityContext:
+        runAsNonRoot: false
+      volumes:
+      - emptyDir: {}
+        name: home
+EXIT_CODE: 0

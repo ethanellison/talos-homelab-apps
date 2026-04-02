@@ -1,0 +1,10 @@
+{
+  "active_plan": "/var/home/ethanellison/talos-homelab-apps/.sisyphus/plans/external-dns-traefik.md",
+  "started_at": "2026-03-24T13:07:05.371Z",
+  "session_ids": [
+    "ses_2e02621fdffer1uqdgrG29MZsY",
+    "ses_2e0262128ffe6M64oUz7zhnQc5",
+    "ses_2e0266693ffepKMOaaTVMp9YDK"
+  ],
+  "plan_name": "external-dns-traefik"
+}
