@@ -5,5 +5,6 @@ resources:
   - metallb-config.yaml
   - ../../external-dns
   - ../../traefik
+  - longhorn-ingress.yaml
 patchesStrategicMerge:
   - traefik-helmrelease-patch.yaml

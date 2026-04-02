@@ -5,3 +5,4 @@ resources:
   # - ./external-dns
   - ./cert-manager
   - ./metal-lb
+  - ./longhorn
