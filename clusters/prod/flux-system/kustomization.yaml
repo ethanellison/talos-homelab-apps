@@ -20,7 +20,7 @@ patches:
             memory: 384Mi
       - op: add
         path: /spec/template/spec/containers/0/args/-
-        value: --concurrent=2
+        value: --concurrent=1
 
   # helm-controller
   - target:
