@@ -4,9 +4,9 @@ metadata:
   name: cluster-default
   namespace: default
 spec:
-  instances: 3
+  instances: 1
   storage:
-    size: 10Gi
+    size: 2Gi
   managed:
     roles:
       - name: coder
