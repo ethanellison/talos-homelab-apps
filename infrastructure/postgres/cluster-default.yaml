@@ -1,0 +1,15 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cluster-default
+spec:
+  instances: 3
+  storage:
+    size: 10Gi
+  managed:
+    roles:
+      - name: coder
+        ensure: present
+        comment: Coder
+        passwordSecret:
+         name: coder-creds

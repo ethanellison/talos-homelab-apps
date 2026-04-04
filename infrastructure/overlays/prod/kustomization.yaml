@@ -6,5 +6,6 @@ resources:
   - ../../external-dns
   - ../../traefik
   - longhorn-ingress.yaml
+  - creds.yaml
 patchesStrategicMerge:
   - traefik-helmrelease-patch.yaml

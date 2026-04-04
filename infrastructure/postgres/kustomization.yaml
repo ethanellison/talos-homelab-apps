@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - helmrepo.yaml
   - helmrelease.yaml
-  - cluster-example.yaml
+  - cluster-default.yaml

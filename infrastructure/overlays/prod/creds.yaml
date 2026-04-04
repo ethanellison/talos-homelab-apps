@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  password: Y29kZXI=
+  username: Y29kZXI=
+kind: Secret
+metadata:
+  name: coder-creds
