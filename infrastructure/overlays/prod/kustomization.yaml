@@ -7,5 +7,6 @@ resources:
   - ../../traefik
   - longhorn-ingress.yaml
   - creds.yaml
+  - cluster-default.yaml
 patchesStrategicMerge:
   - traefik-helmrelease-patch.yaml
