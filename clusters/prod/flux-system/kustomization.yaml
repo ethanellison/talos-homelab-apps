@@ -20,7 +20,7 @@ patches:
             memory: 384Mi
       - op: add
         path: /spec/template/spec/containers/0/args/-
-        value: --concurrent=1
+        value: --concurrent=2
 
   # helm-controller
   - target:
@@ -37,7 +37,7 @@ patches:
             memory: 256Mi
       - op: add
         path: /spec/template/spec/containers/0/args/-
-        value: --concurrent=1
+        value: --concurrent=2
 
   # source-controller
   - target:
@@ -51,7 +51,7 @@ patches:
           requests:
             memory: 32Mi
           limits:
-            memory: 128Mi
+            memory: 256Mi
 
   # notification-controller
   - target:
@@ -65,4 +65,4 @@ patches:
           requests:
             memory: 16Mi
           limits:
-            memory: 64Mi
+            memory: 256Mi
