@@ -5,13 +5,13 @@
 
 version: 2
 updates:
-  - package-ecosystem: "docker" # See documentation for possible values
+  - package-ecosystem: "docker"
     directories:
-    - "**/*" # Location of package manifests
+    - "**"
     schedule:
       interval: "weekly"
   - package-ecosystem: "helm"
     directories:
-    - "**/*"
+    - "**"
     schedule:
       interval: "weekly"
