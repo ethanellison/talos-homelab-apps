@@ -5,7 +5,11 @@
 
 version: 2
 updates:
-  - package-ecosystem: "helm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "docker" # See documentation for possible values
+    directory: "**/*" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
+  - package-ecosystem: "helm"
+    directory: "**/*"
+    schedule:
+      interval: "weekly"
